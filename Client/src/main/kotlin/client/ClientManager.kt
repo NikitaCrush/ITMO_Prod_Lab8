@@ -27,6 +27,7 @@ class ClientManager(private val host: String, private val port: Int) {
             try {
                 val commandListJson: String = reader.readLine() ?: "{}"
                 commandList = Json.decodeFromString(commandListJson)
+                System.out.println(commandListJson)
                 break
             } catch (e: IOException) {
                 println("Unable to connect to server. Retrying in 10 seconds...")

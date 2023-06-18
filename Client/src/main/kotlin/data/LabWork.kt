@@ -18,17 +18,41 @@ import utils.LocalDateTimeSerializer
  */
 @Serializable
 data class LabWork(
-    var id: Long,
-    val name: String,       //Поле не может быть null, Строка не может быть пустой
-    val coordinates: Coordinates,//Поле не может быть null
+    private var id: Long,
+    private val name: String,       //Поле не может быть null, Строка не может быть пустой
+    private val coordinates: Coordinates,//Поле не может быть null
     @Serializable(with = LocalDateTimeSerializer::class)
-    val creationDate: LocalDateTime,//Значение поля должно быть больше 0
-    val minimalPoint: Int,//Значение поля должно быть больше 0
-    val personalQualitiesMinimum: Int,//Поле не может быть null, Значение поля должно быть больше 0
-    val difficulty: Difficulty?,//Поле может быть null
-    val discipline: Discipline, //Поле не может быть null
-    var owner: String
+    private val creationDate: LocalDateTime,//Значение поля должно быть больше 0
+    private val minimalPoint: Int,//Значение поля должно быть больше 0
+    private val personalQualitiesMinimum: Int,//Поле не может быть null, Значение поля должно быть больше 0
+    private val difficulty: Difficulty?,//Поле может быть null
+    private val discipline: Discipline, //Поле не может быть null
+    private var owner: String
 ) : Comparable<LabWork>, java.io.Serializable {
+
+    fun getId(): Long{
+        return id
+    }
+    fun getName(): String{
+        return name
+    }
+    fun getMinimalPoint(): Int{
+        return minimalPoint
+    }
+    fun getDifficulty(): Difficulty?{
+        return difficulty
+    }
+    fun getCoordinates(): Coordinates{
+        return coordinates
+    }
+    fun getDiscipline(): Discipline{
+        return discipline
+    }
+    fun getOwner(): String{
+        return owner
+    }
+
+
 
     /**
      * Compares this LabWork object with another LabWork object by their IDs.

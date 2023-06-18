@@ -8,8 +8,10 @@ import javafx.scene.control.Alert
 import javafx.scene.control.Alert.AlertType
 import tornadofx.*
 import java.util.*
+import data.User
 
 import design.MainPage
+import utils.HashUtil
 
 
 class LoginPage : View() {
@@ -23,6 +25,9 @@ class LoginPage : View() {
     // Поля, которые будут хранить в себе введенные логин и пароль
     private val inputLogin = SimpleStringProperty("")
     private val inputPassword = SimpleStringProperty("")
+
+    private val hashUtil = HashUtil()
+
 
     override val root = form {
         setPrefSize(840.0, 590.0)
@@ -75,12 +80,13 @@ class LoginPage : View() {
 
                 }
                 action {
-                    MyApp.currLogin=inputLogin.value
-                    val command = "login ${inputLogin.value} ${inputPassword.value}"
-                    val response = MyApp.runCommand(command)
-
-                    val al = Alert(AlertType.INFORMATION, response.message).show()
-
+                    MyApp.login=inputLogin.value
+                    MyApp.commandInterpreter.getSerializedUser(
+                        User(
+                            inputLogin.value,
+                            hashUtil.hashPassword(inputPassword.value)
+                        )
+                    )
                     replaceWith<MainPage>(sizeToScene = true)
 
                     inputLogin.value = ""
@@ -115,7 +121,7 @@ class LoginPage : View() {
 
                     val al = Alert(AlertType.INFORMATION, response.message).show()
 
-                    replaceWith<RegistrationPage>(sizeToScene = true)
+                    replaceWith<MainPage>(sizeToScene = true)
                 }
             }
         }

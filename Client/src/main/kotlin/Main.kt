@@ -12,7 +12,7 @@ val appModule = module {
     single { LabWorkReader({ readlnOrNull() ?: throw IllegalStateException("No input provided") }, get()) }
     single { LabWorkValidator() }
     single { ProfileReader() }
-    single { CommandInterpreter() }
+    single { CommandInterpreter(get()) }
 }
 
 fun main() {

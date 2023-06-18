@@ -26,7 +26,7 @@ class LabWorkValidator {
     * @throws ValidationException If the coordinates are null or the X value is greater than 608.
      */
     fun validateCoordinates(coordinates: Coordinates?) {
-        if (coordinates == null || coordinates.x > 608) {
+        if (coordinates == null || coordinates.getX() > 608) {
             throw ValidationException("X coordinate value cannot be greater than 608.")
         }
     }
@@ -66,7 +66,7 @@ class LabWorkValidator {
     * @throws ValidationException If the discipline is null or the name is empty.
     */
     fun validateDiscipline(discipline: Discipline?) {
-        if (discipline == null || discipline.name.isBlank()) {
+        if (discipline == null || discipline.getName().isBlank()) {
             throw ValidationException("Discipline name cannot be empty.")
         }
     }

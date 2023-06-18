@@ -10,6 +10,13 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Discipline(
-    val name: String,//Поле не может быть null, Строка не может быть пустой
-    val selfStudyHours: Long
-)
+    private val name: String,//Поле не может быть null, Строка не может быть пустой
+    private val selfStudyHours: Long
+){
+    fun getName(): String{
+        return name
+    }
+    fun getSelfStudyHours(): Long{
+        return selfStudyHours
+    }
+}

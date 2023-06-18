@@ -3,6 +3,8 @@ package client
 import commandArguments.CommandArgument
 import commandArguments.CommandData
 import commandArguments.CommandType
+import data.User
+import design.LoginPage
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
@@ -13,10 +15,12 @@ import utils.ProfileReader
 /**
  * Interprets user input into commands that can be executed by the ClientManager.
  */
-class CommandInterpreter : KoinComponent {
+class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
     private val labWorkReader: LabWorkReader by inject()
-    private val clientManager: ClientManager by inject()
+//    private val clientManager: ClientManager by inject()
     private val profileReader: ProfileReader by inject()
+    private val clientManager = clientManager
+    private val loginPage = LoginPage()
     private var loggedInUser: String? = null
 
 
@@ -29,9 +33,11 @@ class CommandInterpreter : KoinComponent {
      * @throws IllegalStateException If a user is not logged in/out when required.
      */
     fun interpret(input: String): Pair<CommandData, List<CommandArgument>> {
+        clientManager.connect()
         val commandParts = input.split(" ")
         val commandName = commandParts[0]
         val parameters = commandParts.drop(1)
+//        System.out.println(clientManager.commandList)
         val commandType = findCommandType(commandName) ?: throw IllegalArgumentException("Command not found.")
 
         val arguments = when (commandType) {
@@ -123,8 +129,9 @@ class CommandInterpreter : KoinComponent {
      *
      * @return The serialized User.
      */
-    private fun getSerializedUser(): String {
-        val user = profileReader.readUser()
+    fun getSerializedUser(user: User): String {
+//        val user = loginPage
+
         loggedInUser = user.username  // Store the username after reading user data
         return Json.encodeToString(user)
     }

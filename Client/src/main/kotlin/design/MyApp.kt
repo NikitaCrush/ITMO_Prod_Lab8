@@ -16,11 +16,16 @@ class MyApp : App(LoginPage::class) {
 //    val root = Parent(fxmlLoader.load())
 //    val scene = Scene(root)
 
+
+
     companion object{
+
         val login =""
+        val clientManager = ClientManager("localhost", 12345)
+        val commandInterpreter = CommandInterpreter(clientManager)
+
             fun runCommand(command: String): Response {
-            val clientManager = ClientManager("localhost", 12345)
-            val commandInterpreter = CommandInterpreter()
+
 
             // Парсинг команды
             val (commandData, _) = commandInterpreter.interpret(command)

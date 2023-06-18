@@ -10,6 +10,14 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Coordinates(
-    val x: Long,
-    val y: Double
-)
+    private val x: Long,
+    private val y: Double,
+){
+    fun getX(): Long{
+        return x
+    }
+    fun getY(): Double{
+        return y
+    }
+}
+
