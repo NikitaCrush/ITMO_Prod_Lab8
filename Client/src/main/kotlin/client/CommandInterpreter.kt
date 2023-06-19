@@ -20,10 +20,13 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
 //    private val clientManager: ClientManager by inject()
     private val profileReader: ProfileReader by inject()
     private val clientManager = clientManager
-    private val loginPage = LoginPage()
+//    private val loginPage = LoginPage()
     private var loggedInUser: String? = null
+    private var user: User? = null
 
-
+    public fun setUser(user: User){
+         this.user=user
+    }
     /**
      * Interpret user input into a command.
      *
@@ -129,10 +132,10 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
      *
      * @return The serialized User.
      */
-    fun getSerializedUser(user: User): String {
+    private fun getSerializedUser(): String {
 //        val user = loginPage
 
-        loggedInUser = user.username  // Store the username after reading user data
+        loggedInUser = this.user?.username  // Store the username after reading user data
         return Json.encodeToString(user)
     }
 

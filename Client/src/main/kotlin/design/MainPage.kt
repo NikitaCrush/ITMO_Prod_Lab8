@@ -1,22 +1,5 @@
 package design
 
-//
-//import data.*
-//import design.*
-//import com.sun.javafx.binding.BidirectionalBinding.bind
-//import javafx.animation.AnimationTimer
-//import javafx.beans.property.SimpleStringProperty
-//import javafx.collections.ObservableList
-//import javafx.geometry.Pos
-//import javafx.scene.paint.Color
-//import javafx.scene.shape.Line
-//import tornadofx.column
-//import tornadofx.*
-//import tornadofx.Stylesheet.Companion.arrow
-//import tornadofx.Stylesheet.Companion.imageView
-//import tornadofx.Stylesheet.Companion.left
-//import tornadofx.Stylesheet.Companion.tab
-//import java.awt.Point
 import design.LoginPage
 import com.sun.javafx.binding.BidirectionalBinding.bind
 import data.LabWork
@@ -24,6 +7,8 @@ import javafx.animation.AnimationTimer
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
+import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.scene.paint.Color
 import javafx.scene.shape.Line
 import tornadofx.*
@@ -97,7 +82,29 @@ class MainPage() : View() {
                             minWidth = 100.0
                             minHeight = 50.0
                             action {
-                                openInternalWindow(HelpPage::class)
+                                val alert = Alert(Alert.AlertType.INFORMATION)
+                                alert.setTitle("Information about commands")
+                                alert.setHeaderText("Commands:")
+                                alert.setContentText("""
+                                                    help
+                                                    show
+                                                    add
+                                                    save
+                                                    exit
+                                                    remove by Id
+                                                """.trimIndent())
+
+                                val result = alert.showAndWait()
+                                if (result.isPresent && result.get() == ButtonType.OK) {
+                                    alert.close()
+                                }
+//                                val alert = Alert(Alert.AlertType.INFORMATION)
+//                                alert.setTitle("Information about commands")
+//                                alert.setHeaderText("Commands:")
+//                                alert.setContentText("help \n" + "show \n" + "add \n" + "save \n" + "exit \n" + "remove by Id")
+//
+//                                alert.showAndWait()
+//                                openInternalWindow(HelpPage::class)
                             }
                         }
                         onRefresh()

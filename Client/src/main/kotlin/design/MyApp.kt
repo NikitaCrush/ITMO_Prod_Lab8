@@ -11,7 +11,7 @@ import commandArguments.Response
 import javafx.beans.property.SimpleStringProperty
 import org.koin.core.component.*
 
-class MyApp : App(LoginPage::class) {
+class MyApp : App(LoginPage::class), KoinComponent{
 //    val fxmlLoader = FXMLLoader(getClass().getClassLoader().getResource("Auth.fxml"))
 //    val root = Parent(fxmlLoader.load())
 //    val scene = Scene(root)
@@ -20,7 +20,7 @@ class MyApp : App(LoginPage::class) {
 
     companion object{
 
-        val login =""
+        var login =""
         val clientManager = ClientManager("localhost", 12345)
         val commandInterpreter = CommandInterpreter(clientManager)
 

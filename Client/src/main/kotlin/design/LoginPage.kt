@@ -4,13 +4,10 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
 import javafx.scene.text.TextAlignment
-import javafx.scene.control.Alert
-import javafx.scene.control.Alert.AlertType
 import tornadofx.*
 import java.util.*
-import data.User
 
-import design.MainPage
+import data.User
 import utils.HashUtil
 
 
@@ -81,12 +78,13 @@ class LoginPage : View() {
                 }
                 action {
                     MyApp.login=inputLogin.value
-                    MyApp.commandInterpreter.getSerializedUser(
+                    MyApp.commandInterpreter.setUser(
                         User(
                             inputLogin.value,
                             hashUtil.hashPassword(inputPassword.value)
                         )
                     )
+                    MyApp.runCommand("login")
                     replaceWith<MainPage>(sizeToScene = true)
 
                     inputLogin.value = ""
@@ -116,12 +114,18 @@ class LoginPage : View() {
                 }
                 minHeight = 50.0
                 action {
-                    val command = "reg"
-                    val response = MyApp.runCommand(command)
-
-                    val al = Alert(AlertType.INFORMATION, response.message).show()
-
+                    MyApp.login=inputLogin.value
+                    MyApp.commandInterpreter.setUser(
+                        User(
+                            inputLogin.value,
+                            hashUtil.hashPassword(inputPassword.value)
+                        )
+                    )
+                    MyApp.runCommand("register")
                     replaceWith<MainPage>(sizeToScene = true)
+
+                    inputLogin.value = ""
+                    inputPassword.value = ""
                 }
             }
         }

@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import tornadofx.*
 
-class HelpPage: View() {
+class ShowPage: View() {
     private val answerText= SimpleStringProperty("")
 
     override val root= vbox {
