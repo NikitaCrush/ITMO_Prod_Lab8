@@ -24,11 +24,10 @@ class MyApp : App(LoginPage::class), KoinComponent{
         val clientManager = ClientManager("localhost", 12345)
         val commandInterpreter = CommandInterpreter(clientManager)
 
-            fun runCommand(command: String): Response {
-
-
+        fun runCommand(command: String): Response {
             // Парсинг команды
             val (commandData, _) = commandInterpreter.interpret(command)
+            val task = Task(commandData)
 
             // Проверка валидности аргмуентов
             commandData.arguments.forEach { argument ->
@@ -39,8 +38,9 @@ class MyApp : App(LoginPage::class), KoinComponent{
             }
 
             // Запуск команды и получение ответа
-            val task = Task(commandData)
-            return task.execute(clientManager)
+            val response = task.execute(clientManager)
+            println(response.message)
+                return response
         }
 
         // Управление ресурсами

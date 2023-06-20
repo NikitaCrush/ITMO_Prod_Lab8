@@ -36,11 +36,12 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
      * @throws IllegalStateException If a user is not logged in/out when required.
      */
     fun interpret(input: String): Pair<CommandData, List<CommandArgument>> {
+
         clientManager.connect()
+
         val commandParts = input.split(" ")
         val commandName = commandParts[0]
         val parameters = commandParts.drop(1)
-//        System.out.println(clientManager.commandList)
         val commandType = findCommandType(commandName) ?: throw IllegalArgumentException("Command not found.")
 
         val arguments = when (commandType) {
@@ -48,7 +49,6 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
                 requireLoggedIn()
                 emptyList()
             }
-
             CommandType.SINGLE_ARG -> {
                 requireLoggedIn()
                 requireParameter(parameters)
@@ -74,7 +74,7 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
             CommandType.USER_REGISTRATION -> {
                 requireLoggedOut()
                 val serializedUser = getSerializedUser()
-                listOf(CommandArgument("reg", "User", serializedUser))
+                listOf(CommandArgument("register", "User", serializedUser))
             }
 
             CommandType.USER_LOGIN -> {
@@ -111,6 +111,7 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
      * @return The CommandType, or null if not found.
      */
     private fun findCommandType(commandName: String): CommandType? {
+        println(commandName)
         return clientManager.commandList[commandName]
     }
 
