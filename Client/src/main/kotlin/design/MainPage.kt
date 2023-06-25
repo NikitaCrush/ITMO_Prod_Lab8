@@ -1,8 +1,13 @@
 package design
 
 import design.LoginPage
+import com.google.gson.Gson
 import com.sun.javafx.binding.BidirectionalBinding.bind
+import data.Coordinates
+import data.Difficulty
+import data.Discipline
 import data.LabWork
+import java.util.regex.Pattern
 import javafx.animation.AnimationTimer
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
@@ -16,6 +21,7 @@ import tornadofx.Stylesheet.Companion.arrow
 import tornadofx.Stylesheet.Companion.imageView
 import tornadofx.Stylesheet.Companion.tab
 import java.awt.Point
+import java.time.LocalDateTime
 
 
 class MainPage() : View() {
@@ -23,7 +29,39 @@ class MainPage() : View() {
     private val tableData: ObservableList<LabWork> = mutableListOf<LabWork>().asObservable()
     private val login = SimpleStringProperty()
 
+    fun parseShowResponse(response: String): ArrayList<LabWork> {
+        var outputList = ArrayList<LabWork>()
+        val pattern = Pattern.compile("=\\w+")
+        val parts = response.split("\n")
+        for (part in parts) {
+            val m = pattern.matcher(part)
+            val subParts = ArrayList<String>()
+            while (m.find()) {
+                val group = m.group()
+                subParts.add(group.substring(1, group.length))
+            }
+            val labWorkObj = LabWork(
+                id=subParts[0].toLong(),
+                name=subParts[1].toString(),
+                coordinates=Coordinates(subParts[3].toLong(), subParts[4].toDouble()),
+                LocalDateTime.now(),
+                minimalPoint = subParts[6].toInt(),
+                personalQualitiesMinimum = subParts[7].toInt(),
+                difficulty = Difficulty.valueOf(subParts[8]),
+                discipline = Discipline(subParts[10], subParts[11].toLong()),
+                owner = subParts[12]
+            )
+            outputList.add(labWorkObj)
+        }
+
+        return outputList
+    }
+
     override val root = tabpane {
+        style {
+            backgroundColor += Color.web("#4f4f4f")
+            fontFamily = "Bodoni MT Condensed"
+        }
         tab("Table") {
             borderpane() {
                 primaryStage.isResizable = false
@@ -34,8 +72,10 @@ class MainPage() : View() {
                             fitToWidth = true
                         }
                         tableview(tableData) {
-                            setPrefSize(1500.0, 900.0)
+                            setPrefSize(850.0, 650.0)
                             style {
+                                backgroundColor += Color.web("#454545")
+                                fontFamily = "Bodoni MT Condensed"
                             }
                             isEditable = false
                             column(MyApp.bundle.getString("idColumnName"), LabWork::getId)
@@ -46,26 +86,28 @@ class MainPage() : View() {
                             column("Y", LabWork::getCoordinates).cellFormat {
                                 text = it.getY().toString()
                             }
+                            column(MyApp.bundle.getString("creationDateColumnName"), LabWork::getCreationDate)
                             column(MyApp.bundle.getString("minPointColumnName"), LabWork::getMinimalPoint)
+                            column(MyApp.bundle.getString("persQMin"), LabWork::getPersonalQualitiesMinimum)
                             column(MyApp.bundle.getString("difficultyColumnName"), LabWork::getDifficulty)
                             column(MyApp.bundle.getString("disciplineNameColumnName"), LabWork::getDiscipline).cellFormat {
-                                text = it.getName().toString()
+                                text = it.getName()
                             }
                             column(MyApp.bundle.getString("selfStudyHoursColumnName"), LabWork::getDiscipline).cellFormat {
                                 text = it.getSelfStudyHours().toString()
                             }
+                            column(MyApp.bundle.getString("ownerColumnName"), LabWork::getOwner)
                         }
                     }
                 }
-
                 left {
                     maxWidth = 240.0
                     vbox {
                         login.set(MyApp.login)
                         label(login).style {
                             setAlignment(Pos.TOP_CENTER)
-                            fontFamily = "Small capital"
-                            fontSize = 20.px
+                            fontFamily = "Bodoni MT Condensed"
+                            fontSize = 30.px
                             padding = box(10.px, 20.px)
                         }
                         style {
@@ -76,6 +118,7 @@ class MainPage() : View() {
                         button(MyApp.bundle.getString("helpButton")) {
                             style {
                                 textFill = Color.WHITE
+                                fontFamily = "Bodoni MT Condensed"
                                 backgroundColor += Color.BLACK
                                 padding = box(10.px, 5.px)
                             }
@@ -87,25 +130,97 @@ class MainPage() : View() {
                                 alert.setHeaderText("Commands:")
                                 alert.setContentText("""
                                                     help
-                                                    show
                                                     add
-                                                    save
+                                                    clear
                                                     exit
                                                     remove by Id
+                                                    log out
                                                 """.trimIndent())
 
                                 val result = alert.showAndWait()
                                 if (result.isPresent && result.get() == ButtonType.OK) {
                                     alert.close()
                                 }
-//                                val alert = Alert(Alert.AlertType.INFORMATION)
-//                                alert.setTitle("Information about commands")
-//                                alert.setHeaderText("Commands:")
-//                                alert.setContentText("help \n" + "show \n" + "add \n" + "save \n" + "exit \n" + "remove by Id")
 //
-//                                alert.showAndWait()
-//                                openInternalWindow(HelpPage::class)
                             }
+                        }
+                        button(MyApp.bundle.getString("showButton")) {
+                            style {
+                                textFill = Color.WHITE
+                                fontFamily = "Bodoni MT Condensed"
+                                backgroundColor += Color.BLACK
+                                padding = box(10.px, 5.px)
+                            }
+                            minWidth = 100.0
+                            minHeight = 50.0
+                            action {
+                                tableData.asObservable().removeAll()
+                                val answer = MyApp.commandProcessor.runCommand("show")
+                                answer.message
+                                // Parse
+                                val labWorks = parseShowResponse(answer.message)
+
+                                tableData.setAll(labWorks.asObservable())
+                            }
+                        }
+                        button(MyApp.bundle.getString("addEntityButton")) {
+                            style {
+                                textFill = Color.WHITE
+                                backgroundColor += Color.BLACK
+                                padding = box(10.px, 5.px)
+                            }
+                            minWidth = 100.0
+                            minHeight = 50.0
+                            action {
+                                openInternalWindow(AddPage::class)
+                            }
+                        }
+                        button(MyApp.bundle.getString("clearButton")) {
+                            style {
+                                textFill = Color.WHITE
+                                backgroundColor += Color.BLACK
+                                padding = box(10.px, 5.px)
+                            }
+                            minWidth = 100.0
+                            minHeight = 50.0
+                            action {
+                                MyApp.commandProcessor.runCommand("clear")
+                            }
+                        }
+                        button(MyApp.bundle.getString("removeEntityButton")) {
+                            style {
+                                textFill = Color.WHITE
+                                backgroundColor += Color.BLACK
+                                padding = box(10.px, 5.px)
+                            }
+                            minWidth = 100.0
+                            minHeight = 50.0
+                            action {
+                                openInternalWindow(RemoveByIdPage::class)
+                            }
+                        }
+                        button(MyApp.bundle.getString("logOutButton")) {
+                            style {
+                                textFill = Color.WHITE
+                                backgroundColor += Color.BLACK
+                                padding = box(10.px, 5.px)
+                            }
+                            minWidth = 100.0
+                            minHeight = 50.0
+                            action {
+                                MyApp.commandProcessor.runCommand("logout")
+                                replaceWith<LoginPage>(sizeToScene = true)
+                            }
+                        }
+                        button(MyApp.bundle.getString("exitButton")) {
+                            style {
+                                textFill = Color.WHITE
+                                backgroundColor += Color.BLACK
+                                padding = box(10.px, 5.px)
+                            }
+                            minWidth = 100.0
+                            minHeight = 50.0
+                            action { close() }
                         }
                         onRefresh()
                     }

@@ -15,6 +15,7 @@ import java.io.OutputStreamWriter
 import java.io.PrintWriter
 import java.net.Socket
 import java.util.concurrent.Executors
+import kotlin.system.exitProcess
 
 /**
  * Class responsible for handling incoming client requests and sending responses.
@@ -34,6 +35,7 @@ class RequestHandler : KoinComponent {
     fun handle(clientSocket: Socket) {
         handleSocketConnection(clientSocket) { reader, writer ->
             sendAvailableCommands(writer)
+            println("lkjlk")
             while (true) {
                 try {
                     processClientCommand(reader, writer)
@@ -76,8 +78,11 @@ class RequestHandler : KoinComponent {
      * @param writer PrintWriter for the client socket's output stream.
      */
     private fun processClientCommand(reader: BufferedReader, writer: PrintWriter) {
+        println(0)
         val commandData = receiveCommandData(reader)
+        println(1)
         val response = executeCommand(commandData)
+        println(2)
         sendResponse(response, writer)
     }
 
@@ -89,6 +94,8 @@ class RequestHandler : KoinComponent {
      */
     private fun receiveCommandData(reader: BufferedReader): CommandData {
         val serializedCommand = reader.readLine()
+        println(serializedCommand)
+
         return Json.decodeFromString(serializedCommand ?: "")
     }
 

@@ -3,6 +3,7 @@ package client
 import commandArguments.CommandArgument
 import commandArguments.CommandData
 import commandArguments.CommandType
+import data.LabWork
 import data.User
 import design.LoginPage
 import kotlinx.serialization.encodeToString
@@ -17,15 +18,18 @@ import utils.ProfileReader
  */
 class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
     private val labWorkReader: LabWorkReader by inject()
-//    private val clientManager: ClientManager by inject()
-    private val profileReader: ProfileReader by inject()
-    private val clientManager = clientManager
-//    private val loginPage = LoginPage()
+    public val clientManager: ClientManager = clientManager
+
     private var loggedInUser: String? = null
     private var user: User? = null
+    private var labWork: LabWork? = null
 
-    public fun setUser(user: User){
+    fun setUser(user: User){
          this.user=user
+    }
+
+    fun setLabWork(labWork: LabWork){
+        this.labWork = labWork
     }
     /**
      * Interpret user input into a command.
@@ -36,8 +40,7 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
      * @throws IllegalStateException If a user is not logged in/out when required.
      */
     fun interpret(input: String): Pair<CommandData, List<CommandArgument>> {
-
-        clientManager.connect()
+//        clientManager.connect()
 
         val commandParts = input.split(" ")
         val commandName = commandParts[0]
@@ -87,7 +90,6 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
                 // Clear logged in user
                 loggedInUser = null
                 // Clear client token
-                clientManager.token = null
                 emptyList()
             }
 
@@ -122,10 +124,7 @@ class CommandInterpreter(clientManager: ClientManager) : KoinComponent {
      * @throws IllegalStateException If no user is logged in.
      */
     private fun getSerializedLabWork(): String {
-        // Check if a user is logged in before attempting to read lab work
-        val owner = loggedInUser ?: throw IllegalStateException("No user logged in.")
-        val labWork = labWorkReader.readLabWork(owner)
-        return Json.encodeToString(labWork)
+        return Json.encodeToString(this.labWork)
     }
 
     /**

@@ -1,4 +1,4 @@
-package client
+/*package client
 
 import data.Messages
 import org.koin.core.component.KoinComponent
@@ -12,12 +12,13 @@ class CommandProcessor : KoinComponent {
     /**
      * Start processing user input commands
      */
+
     fun start() {
         clientManager.setCommandInterpreter(commandInterpreter)
         clientManager.connect()
 
-        println(Messages.WELCOME)
-        println(Messages.ENTER_HELP)
+        //println(Messages.WELCOME)
+        //println(Messages.ENTER_HELP)
 
         while (true) {
             print("> ")
@@ -53,5 +54,63 @@ class CommandProcessor : KoinComponent {
             }
         }
         clientManager.disconnect()
+    }
+}
+*/
+
+package client
+
+import commandArguments.Response
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
+class CommandProcessor : KoinComponent {
+    val commandInterpreter: CommandInterpreter by inject()
+    private val clientManager: ClientManager by inject()
+
+    constructor() {
+        initClientManagerConnection()
+    }
+
+    private fun initClientManagerConnection() {
+        commandInterpreter.clientManager.connect()
+    }
+
+    private fun processExit() {
+        println("Disconnecting server")
+        clientManager.disconnect()
+    }
+
+    fun runCommand(command: String): Response {
+        val command_ = command.lowercase()
+
+        if (command_ == "exit")
+            processExit()
+
+        try {
+            // Parse command
+            val (commandData, _) = commandInterpreter.interpret(command_)
+
+            // Skip login or registration check
+            // ...
+
+            // Create task object for command execution
+            val task = Task(commandData)
+            val response = task.execute(commandInterpreter.clientManager)
+
+            // Print response message
+            println(response.message)
+            return response
+        }
+        catch (e: IllegalArgumentException) {
+            println(e.message)
+        }
+        catch (e: IllegalStateException) {
+            println(e.message)
+        }
+        catch (e: Exception) {
+            println("Unrecognized exception: ${e.message}")
+        }
+        return Response(false, "Error")
     }
 }

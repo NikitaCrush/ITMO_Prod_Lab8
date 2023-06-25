@@ -16,7 +16,7 @@ class ClientManager(private val host: String, private val port: Int) {
     private val writer: PrintWriter by lazy { PrintWriter(BufferedWriter(OutputStreamWriter(socket.getOutputStream()))) }
     var commandList: Map<String, CommandType> = emptyMap()
     var token: String? = null
-    private var commandInterpreter: CommandInterpreter? = null
+//    private var commandInterpreter: CommandInterpreter? = null
 
     /**
      * Connects to the server
@@ -26,9 +26,8 @@ class ClientManager(private val host: String, private val port: Int) {
         while (true) {
             try {
                 val commandListJson: String = reader.readLine() ?: "{}"
-
                 commandList = Json.decodeFromString(commandListJson)
-                println(commandListJson)
+                println(commandList)
                 break
             } catch (e: IOException) {
                 println("Unable to connect to server. Retrying in 10 seconds...")
@@ -77,7 +76,8 @@ class ClientManager(private val host: String, private val port: Int) {
             receiveToken(token)
         } else if (response.message == Messages.LOGIN_FAIL || response.message == Messages.REGISTRATION_FAIL || response.message == Messages.REGISTRATION_SUCCESS) {
             // Notify the CommandInterpreter about the failed login or registration.
-            failedLoginOrRegistration()
+//            failedLoginOrRegistration()
+            println("BULBA")
         }
 
         return response
@@ -87,16 +87,16 @@ class ClientManager(private val host: String, private val port: Int) {
      * Sets command interpreter
      * @param commandInterpreter Command interpreter to set
      */
-    fun setCommandInterpreter(commandInterpreter: CommandInterpreter) {
-        this.commandInterpreter = commandInterpreter
-    }
+//    fun setCommandInterpreter(commandInterpreter: CommandInterpreter) {
+//        this.commandInterpreter = commandInterpreter
+//    }
 
     private fun receiveToken(token: String) {
         this.token = token
     }
 
-    private fun failedLoginOrRegistration() {
-        commandInterpreter?.failedLoginOrRegistration()
-        this.token = null
-    }
+//    private fun failedLoginOrRegistration() {
+//        commandInterpreter?.failedLoginOrRegistration()
+//        this.token = null
+//    }
 }

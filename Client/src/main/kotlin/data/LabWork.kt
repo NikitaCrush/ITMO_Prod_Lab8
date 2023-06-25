@@ -42,6 +42,9 @@ data class LabWork(
     fun getDifficulty(): Difficulty?{
         return difficulty
     }
+    fun getPersonalQualitiesMinimum(): Int{
+        return personalQualitiesMinimum
+    }
     fun getCoordinates(): Coordinates{
         return coordinates
     }
@@ -50,6 +53,9 @@ data class LabWork(
     }
     fun getOwner(): String{
         return owner
+    }
+    fun getCreationDate(): LocalDateTime{
+        return creationDate
     }
 
 
