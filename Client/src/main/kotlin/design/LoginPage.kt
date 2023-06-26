@@ -15,6 +15,7 @@ import javafx.scene.control.Button
 import javafx.scene.layout.Pane
 import javafx.scene.layout.VBox
 import utils.HashUtil
+import javax.imageio.ImageIO
 import javax.swing.ButtonGroup
 
 
@@ -34,14 +35,13 @@ class LoginPage : View() {
     private val hashUtil = HashUtil()
 
     override val root = form {
-        setPrefSize(850.0, 650.0)
+        setPrefSize(900.0, 700.0)
         primaryStage.isResizable = false
         style {
             backgroundColor += Color.web("#454545")
         }
         vbox(70, Pos.TOP_LEFT) {
-            val image = Image("иконка куроми.png")
-            val pic = ImageView(image)
+//            ImageIO.read("ITMO_Prog_Lab7v2-main\\Client\\src\\main\\resources\\иконка куроми.png")
         }
         label(authLabelText) {
             style{
@@ -116,6 +116,8 @@ class LoginPage : View() {
                     setAlignment(Pos.TOP_LEFT)
                     textFill = Color.BLACK
                     padding = box(10.px, 20.px)
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
                 }
                 setStyle("-fx-background-color: #dd2e72;")
                 minHeight = 50.0
@@ -130,6 +132,8 @@ class LoginPage : View() {
                     setTextAlignment(TextAlignment.CENTER)
                     textFill = Color.BLACK
                     padding = box(10.px, 20.px)
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
                 }
                 setStyle("-fx-background-color: #dd2e72;")
                 minHeight = 50.0
@@ -155,6 +159,7 @@ class LoginPage : View() {
                     style{
                         fontFamily = "Bodoni MT Condensed"
                         textFill = Color.BLACK
+                        padding = box(10.px, 20.px)
                     }
                     setStyle("-fx-background-color: #dd2e72;")
                     action {
@@ -165,6 +170,7 @@ class LoginPage : View() {
                     style{
                         fontFamily = "Bodoni MT Condensed"
                         textFill = Color.BLACK
+                        padding = box(10.px, 20.px)
                     }
                     setStyle("-fx-background-color: #dd2e72;")
                     action {

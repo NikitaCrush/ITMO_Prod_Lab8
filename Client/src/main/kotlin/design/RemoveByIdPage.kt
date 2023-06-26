@@ -3,34 +3,43 @@ package design
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
 import javafx.scene.paint.Color
+import javafx.scene.text.TextAlignment
 import tornadofx.*
 
 
 class RemoveByIdPage : View() {
     private val input = SimpleStringProperty()
 
-    override val root= form{
+    override val root= form {
+        setPrefSize(900.0, 700.0)
+        style {
+            backgroundColor += Color.web("#4f4f4f")
+        }
         fieldset {
             alignment = Pos.TOP_CENTER
             field(MyApp.bundle.getString("enterId")) {
                 textfield(input).useMaxWidth
                 style {
-                    setMaxWidth(280.0)
-                    fontFamily = "Small capital"
-                }
-            }
-        }
-        hbox(50, Pos.BOTTOM_RIGHT){
-            button(MyApp.bundle.getString("Execute")) {
-                style {
-                    setAlignment(Pos.TOP_CENTER)
-                    textFill = Color.WHITE
-                    backgroundColor += Color.BLACK
+                    setAlignment(Pos.TOP_LEFT)
+                    textFill = Color.BLACK
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
                     padding = box(10.px, 20.px)
                 }
-                action {
-                    MyApp.commandProcessor.commandInterpreter.interpret("remove_by_id -${input.value}")
-                    input.value=""
+                minHeight = 50.0
+            }
+            hbox{
+                button("execute") {
+                    style {
+                        setAlignment(Pos.TOP_CENTER)
+                        textFill = Color.WHITE
+                        padding = box(10.px, 20.px)
+                    }
+                    setStyle("-fx-background-color: #dd2e72;")
+                    action {
+                        MyApp.commandProcessor.runCommand("remove_by_id -${input.value}")
+                        replaceWith<MainPage>(sizeToScene = true)
+                    }
                 }
             }
         }

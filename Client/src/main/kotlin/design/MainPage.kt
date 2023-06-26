@@ -1,26 +1,17 @@
 package design
 
-import design.LoginPage
-import com.google.gson.Gson
-import com.sun.javafx.binding.BidirectionalBinding.bind
 import data.Coordinates
 import data.Difficulty
 import data.Discipline
 import data.LabWork
 import java.util.regex.Pattern
-import javafx.animation.AnimationTimer
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import javafx.geometry.Pos
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import javafx.scene.paint.Color
-import javafx.scene.shape.Line
 import tornadofx.*
-import tornadofx.Stylesheet.Companion.arrow
-import tornadofx.Stylesheet.Companion.imageView
-import tornadofx.Stylesheet.Companion.tab
-import java.awt.Point
 import java.time.LocalDateTime
 
 
@@ -42,7 +33,7 @@ class MainPage() : View() {
             }
             val labWorkObj = LabWork(
                 id=subParts[0].toLong(),
-                name=subParts[1].toString(),
+                name=subParts[1],
                 coordinates=Coordinates(subParts[3].toLong(), subParts[4].toDouble()),
                 LocalDateTime.now(),
                 minimalPoint = subParts[6].toInt(),
@@ -58,11 +49,12 @@ class MainPage() : View() {
     }
 
     override val root = tabpane {
+        setPrefSize(890.0, 650.0)
         style {
             backgroundColor += Color.web("#4f4f4f")
-            fontFamily = "Bodoni MT Condensed"
         }
         tab("Table") {
+            setPrefSize(900.0, 700.0)
             borderpane() {
                 primaryStage.isResizable = false
                 right {

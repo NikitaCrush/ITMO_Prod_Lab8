@@ -5,7 +5,6 @@ import data.Difficulty
 import data.Discipline
 import data.LabWork
 import javafx.beans.property.SimpleStringProperty
-import javafx.concurrent.Task
 import javafx.geometry.Pos
 import tornadofx.*
 import java.time.LocalDateTime
@@ -27,66 +26,88 @@ class AddPage : View() {
     private val answerText = SimpleStringProperty()
 
     override val root = form {
-        setPrefSize(840.0, 590.0)
+        setPrefSize(900.0, 700.0)
+        style {
+            backgroundColor += Color.web("#dd2e72")
+        }
         fieldset {
             field(MyApp.bundle.getString("name")) {
                 textfield(inputName).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
             field(MyApp.bundle.getString("cX")) {
                 textfield(inputX).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
             field(MyApp.bundle.getString("cY")) {
                 textfield(inputY).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
             field(MyApp.bundle.getString("minimalPoint")) {
                 textfield(inputMinimalPoint).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
             field(MyApp.bundle.getString("pQMin")) {
                 textfield(inputPQMin).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
             field("${MyApp.bundle.getString("difficulty")}: \n[EASY,\nNORMAL,\nTERRIBLE] or null") {
                 textfield(inputDifficulty).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
             field(MyApp.bundle.getString("dName")) {
                 textfield(inputDName).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
             field(MyApp.bundle.getString("dSSH")) {
                 textfield(inputDSSH).useMaxWidth
                 style {
-                    fontFamily = "Small capital"
+                    fontSize = 25.px
+                    fontFamily = "Bodoni MT Condensed"
+                    textFill = Color.web("dd2e72")
                 }
             }
         }.style{
             setMaxSize(750.0, 900.0)
+            backgroundColor += Color.web("#dd2e72")
             alignment = Pos.TOP_CENTER
         }
         hbox(50, Pos.BOTTOM_RIGHT) {
             button("Create") {
                 style {
+                    setStyle("-fx-background-color: #454545;")
                     setAlignment(Pos.TOP_CENTER)
-                    textFill = Color.WHITE
+                    textFill = Color.web("dd2e72")
                     backgroundColor += Color.BLACK
+                    fontFamily = "Bodoni MT Condensed"
                     padding = box(10.px, 20.px)
                 }
                 action {
@@ -103,12 +124,15 @@ class AddPage : View() {
                     )
                     MyApp.commandProcessor.commandInterpreter.setLabWork(labWork)
                     MyApp.commandProcessor.runCommand("add")
-                    replaceWith<MainPage>(sizeToScene = true)
+                    replaceWith<MainPage>(sizeToScene = false)
                 }
             }
             label(answerText).style {
                 setAlignment(Pos.TOP_CENTER)
                 padding = box(30.px, 20.px)
+                fontSize = 25.px
+                fontFamily = "Bodoni MT Condensed"
+                textFill = Color.web("dd2e72")
             }
         }
     }
