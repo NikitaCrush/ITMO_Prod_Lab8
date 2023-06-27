@@ -163,6 +163,7 @@ class LoginPage : View() {
                     }
                     setStyle("-fx-background-color: #dd2e72;")
                     action {
+                        FX.locale = Locale("ru")
                         setLocaleBundle("ru", "RU")
                     }
                 }
@@ -174,6 +175,7 @@ class LoginPage : View() {
                     }
                     setStyle("-fx-background-color: #dd2e72;")
                     action {
+                        FX.locale = Locale("en")
                         setLocaleBundle("en", "EN")
                     }
                 }

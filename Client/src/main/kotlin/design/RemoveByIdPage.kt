@@ -11,7 +11,7 @@ class RemoveByIdPage : View() {
     private val input = SimpleStringProperty()
 
     override val root= form {
-        setPrefSize(900.0, 700.0)
+        setPrefSize(500.0, 300.0)
         style {
             backgroundColor += Color.web("#4f4f4f")
         }
@@ -37,7 +37,7 @@ class RemoveByIdPage : View() {
                     }
                     setStyle("-fx-background-color: #dd2e72;")
                     action {
-                        MyApp.commandProcessor.runCommand("remove_by_id -${input.value}")
+                        MyApp.commandProcessor.runCommand("remove_by_id ${input.value}")
                         replaceWith<MainPage>(sizeToScene = true)
                     }
                 }

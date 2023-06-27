@@ -1,20 +1,12 @@
 package design
 
-import client.ClientManager
 import tornadofx.*
 import java.util.*
-
-import client.CommandInterpreter
 import client.CommandProcessor
-import client.Task
-import client.Task.*
-import commandArguments.Response
-import javafx.beans.property.SimpleStringProperty
 import org.koin.core.component.*
 
 class MyApp : App(LoginPage::class), KoinComponent{
     companion object{
-
         var login = ""
         val commandProcessor = CommandProcessor()
 

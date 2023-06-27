@@ -167,18 +167,6 @@ class MainPage() : View() {
                                 openInternalWindow(AddPage::class)
                             }
                         }
-                        button(MyApp.bundle.getString("clearButton")) {
-                            style {
-                                textFill = Color.WHITE
-                                backgroundColor += Color.BLACK
-                                padding = box(10.px, 5.px)
-                            }
-                            minWidth = 100.0
-                            minHeight = 50.0
-                            action {
-                                MyApp.commandProcessor.runCommand("clear")
-                            }
-                        }
                         button(MyApp.bundle.getString("removeEntityButton")) {
                             style {
                                 textFill = Color.WHITE
